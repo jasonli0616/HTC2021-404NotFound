@@ -4,44 +4,79 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tutors.css') }}">
+
 <form action="#" method="POST">
-    <select name="subject" class="form-select" aria-label="Default select example">
-        {% if subject %}
-            <option value="{{ subject }}" selected>{{ subject }}</option>
-        {% else %}
-            <option value="" selected>Select a subject</option>
-        {% endif %}
-        <option value="Math">Math</option>
-        <option value="English">English</option>
-        <option value="Physics">Physics</option>
+    <select name="subject">
+        {% for subject in subjects %}
+            {% if subject == subject_selected %}
+                <option value="{{ subject }}" selected>{{ subject }}</option>
+            {% else %}
+                <option value="{{ subject }}">{{ subject }}</option>
+            {% endif %}
+        {% endfor %}
     </select>
-    <select name="grade" class="form-select" aria-label="Default select example">
-        {% if grade %}
-            <option value="{{ grade }}" selected>{{ grade }}</option>
-        {% else %}
-            <option value="" selected>Select a subject</option>
-        {% endif %}
-        <option value="" selected>Select a grade</option>
-        {% for i in range(5, 13) %}
-            <option value="{{ i }}">{{ i }}</option>
+    <select name="grade">
+        {% for grade in grades %}
+            {% if grade == grade_selected %}
+                <option value="{{ grade }}" selected>{{ grade }}</option>
+            {% else %}
+                <option value="{{ grade }}">{{ grade }}</option>
+            {% endif %}<
         {% endfor %}
     </select>
     <button type="submit" class="btn btn-primary">Find</button>
 </form>
 
-{% if tutors %}
-    {% for tutor in tutors %}
+<div class="tutor-wrapper">
+    {% if tutors %}
+        {% for tutor in tutors %}
+        <div class="tutor"
+            data-aos="fade-up"
+            data-aos-duration="1000"
+        >
+            <a href="/tutors/{{ tutor.id }}">
+            <div class="alert alert-dark" role="alert">
+                <h4 class="alert-heading">{{ tutor.name }}</h4>
 
-        <div class="alert alert-secondary" role="alert">
-            <h4 class="alert-heading">{{ tutor.name }}</h4>
-            <p>{{ tutor.average_stars }} stars</p>
-            <p>{{ tutor.subject }}</p>
-            <p>Grade {{ tutor.grade }}</p>
-            <hr>
-            <p class="mb-0">{{ tutor.description }}</p>
+                <!-- stars -->
+                {% for i in range(0, tutor.average_stars) %}
+                    <i class="bi bi-star-fill"></i>
+                {% endfor %}
+                {% for i in range(0, 5-tutor.average_stars) %}
+                    <i class="bi bi-star"></i>
+                {% endfor %}
+
+                <p>
+                    <strong>Subject:</strong> Grade {{ tutor.grade }} {{ tutor.subject }}
+                    {% if tutor.subject == 'Math' %}
+                        <i class="bi bi-calculator"></i>
+                    {% elif tutor.subject == 'English' %}
+                        <i class="bi bi-book"></i>
+                    {% elif tutor.subject == 'Physics' %}
+                        <i class="fas fa-atom"></i>
+                    {% elif tutor.subject == 'French' %}
+                        <i class="bi bi-translate"></i>
+                    {% elif tutor.subject == 'Science' %}
+                        <i class="fas fa-flask"></i>
+                    {% elif tutor.subject == 'Spanish' %}
+                        <i class="bi bi-translate"></i>
+                    {% elif tutor.subject == 'Computer Science' %}
+                        <i class="bi bi-laptop"></i>
+                    {% endif %}
+                </p>
+
+                <hr>
+                <p class="mb-0">{{ tutor.description }}</p>
+                <img class="tutor-img" src="https://images.unsplash.com/photo-1513258496099-48168024aec0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="">
+            </div>
+            </a>
+
         </div>
+        {% endfor %}
+    {% endif %}
+</div>
 
-    {% endfor %}
-{% endif %}
+<script src="https://kit.fontawesome.com/9d9f4d1b26.js" crossorigin="anonymous"></script>
 
 {% endblock content %}
