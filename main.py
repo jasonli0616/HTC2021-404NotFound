@@ -1,7 +1,7 @@
 '''
 ------------------------------
 
-Name tbd
+Tutor Center
 
 Authors: Jason, Evan, Raghav, Amogh
 
