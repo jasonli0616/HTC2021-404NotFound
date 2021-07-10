@@ -23,7 +23,8 @@ App config
 '''
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SECRET_KEY'] = 'a' # for testing purposes
+# app.config['SECRET_KEY'] = "string" os.getenv('SECRET_KEY')
 
 # Database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
