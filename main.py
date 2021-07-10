@@ -64,20 +64,48 @@ class Tutor(db.Model):
     description = db.Column(db.String(10000))
     subject = db.Column(db.String(100))
     grade = db.Column(db.Integer)
+    average_stars = db.Column(db.Integer)
 
+tutors = []
 
+for i in range(0, 10):
+    ted = Tutor(name='ted', email='ted@gmail.com', phone_number='2895432435', pay=25, description='hello my name is ted and i like apples. please pick me as your tutor because i am cool and good.', subject='math', grade=10)
+    tutors.append(ted)
+for i in tutors:
+    db.session.add(i)
+    db.session.commit()
 
 
 @app.route('/index.html')
 @app.route('/')
 def index():
+    if not "user" in session:
+        return redirect(url_for('login'))
+
     return render_template('index.html')
+
+@app.route('/tutors')
+def tutors():
+
+    if not "user" in session:
+        return redirect(url_for('login'))
+
+    tutors = None
+
+    if request.method == 'POST':
+        subject = request.form["subject"]
+        grade = request.form["grade"]
+
+        tutors = Tutor.query.filter_by(subject=subject, grade=grade).order_by(Tutor.average_stars).all()
+        tutors.reverse()
+
+    return render_template('tutors.html', tutors=tutors)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
-    if ("user" in session):
+    if "user" in session:
         return redirect(url_for('home'))
 
     if request.method == 'POST':
