@@ -17,8 +17,6 @@
     <title>Tutor Center</title>
     {% endif %}
 
-
-    
 </head>
 <body>
 
@@ -26,14 +24,19 @@
         <a class="navbar-brand" href="{{ url_for('index') }}">
             <img src="{{ url_for('static', filename='img/TutorCenter.png') }}" height="30" class="d-inline-block align-top" alt="" style="border-radius: 5px;">
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+        {% if "user" in session %}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        {% endif %}
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
                 {% if "user" in session %}
                     <li class="nav-item active">
                         <a class="nav-link" href="{{ url_for('index') }}">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ url_for('tutors') }}">Tutors <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="{{ url_for('logout') }}">Logout <span class="sr-only">(current)</span></a>
@@ -45,12 +48,11 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="{{ url_for('register') }}">Register <span class="sr-only">(current)</span></a>
                     </li>
-                    {% endif %}
+                {% endif %}
             </ul>
         </div>
     </nav>
 
-    
 
 
     <div class="container">
