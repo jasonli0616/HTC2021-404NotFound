@@ -61,8 +61,26 @@ def index():
     return render_template('index.html')
 
 
-# @app.route('login', methods=['GET', 'POST'])s
+@app.route('/login', methods=['GET', 'POST'])
+def login():
 
+    if ("user" in session):
+        return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        email = str(request.form["email"])
+        password = str(toHash(request.form["password"]))
+
+        if User.query.filter_by(email=email, password=password).first():
+            # if username and password correct
+            session["user"] = email
+            flash('You are logged in!', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash('Incorrect email or password', 'danger')
+            return redirect(url_for('login'))
+    
+    return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
