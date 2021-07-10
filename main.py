@@ -165,6 +165,10 @@ def logout():
     '''
     Logout page
     '''
+    # if user not logged in send to login page
+    if not "user" in session:
+        return redirect(url_for('login'))
+
     # Remove data from session
     session.pop("user", None)
     # Redirect to homepage
