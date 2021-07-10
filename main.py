@@ -15,6 +15,7 @@ from flask_sqlalchemy import SQLAlchemy
 import hashlib
 import os
 import random
+import json
 
 
 
@@ -35,8 +36,6 @@ db = SQLAlchemy(app)
 '''
 ------------------------------
 '''
-
-
 
 def toHash(value:str):
     '''
@@ -68,6 +67,28 @@ class Tutor(db.Model):
     average_stars = db.Column(db.Integer)
     num_stars = db.Column(db.Integer)
 
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(250))
+    username = db.Column(db.String(64))
+    rating = db.Column(db.Integer)
+    content = db.Column(db.String(10000))
+
+subjects = ["All", "Math", "English", "Physics", "French", "Science", "Spanish", "Computer Science"]
+grades = ["All", "5", "6", "7", "8", "9", "10", "11", "12"]
+
+def generateRandomTutor():
+    '''
+    Generates fake tutors and inserts into database
+    For demonstration purposes
+    '''
+    with open('tutornames.json') as f:
+        name = json.load(f)[random.randint(0, 21985)]
+    t = Tutor(name=name, email=f"{name.lower()}@fake_email.com", phone_number=random.randint(1000000000, 9999999999), pay=random.randint(10000, 99999), description="Hi! I like to tutor people.", subject=subjects[random.randint(1, len(subjects)-1)], grade=grades[random.randint(1, len(grades)-1)], average_stars=random.randint(0, 5), num_stars=random.randint(0, 100))
+    db.session.add(t)
+    db.session.commit()
+
+
 @app.route('/index.html')
 @app.route('/')
 def index():
@@ -76,10 +97,11 @@ def index():
 
 @app.route('/tutors', methods=['GET', 'POST'])
 def tutors():
-    
+
     tutors = []
-    subject = None 
-    grade = None
+
+    subject, grade = "All", "All"
+    tutors = Tutor.query.order_by(Tutor.average_stars).all()
 
     if not "user" in session:
         return redirect(url_for('index'))
@@ -88,24 +110,22 @@ def tutors():
         subject = request.form["subject"]
         grade = request.form["grade"]
 
-        success = True
-
         if not subject and not grade:
-            success = False
-            flash('Please enter a subject or grade.')
+            flash('Please enter a subject and grade.', 'danger')
         elif not subject:
-            tutors = Tutor.query.filter_by(grade=grade).order_by(Tutor.average_stars).all()
+            flash('Please enter a subject.', 'danger')
         elif not grade:
-            tutors = Tutor.query.filter_by(subject=subject).order_by(Tutor.average_stars).all()
+            flash('Please enter a grade.', 'danger')
         else:
             tutors = Tutor.query.filter_by(subject=subject, grade=grade).order_by(Tutor.average_stars).all()
 
-        tutors.reverse()
-        return render_template('tutors.html', tutors=tutors, grade=grade, subject=subject)
-
-    tutors = Tutor.query.order_by(Tutor.average_stars).all()
     tutors.reverse()
-    return render_template('tutors.html', tutors=tutors, subject=subject, grade=grade)
+    return render_template('tutors.html', tutors=tutors, subjects=subjects, grades=grades, grade_selected=grade, subject_selected=subject)
+
+@app.route('/tutors/<id>')
+def tutorName(id):
+    t = Tutor.query.filter_by(id=id).first()
+    return render_template('specific_tutor.html', tutor=t)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -225,13 +245,7 @@ def logout():
 if __name__ == '__main__':
     db.create_all()
 
-    for i in range(0, 5):
-        ted = Tutor(name='Ted', email='jim@jim.ca', phone_number='1111111111', pay=25, description=f'Hello my name is Ted.', subject='Physics', grade=random.randint(9, 12), average_stars=random.randint(1, 5), num_stars=20)
-        db.session.add(ted)
-        db.session.commit()
-    for i in range(0, 3):
-        ted = Tutor(name='Ted', email='jim@jim.ca', phone_number='1111111111', pay=25, description=f'Hello my name is Ted.', subject='Math', grade=random.randint(9, 12), average_stars=random.randint(1, 5), num_stars=20)
-        db.session.add(ted)
-        db.session.commit()
+    for i in range(0, 100):
+        generateRandomTutor()
 
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
