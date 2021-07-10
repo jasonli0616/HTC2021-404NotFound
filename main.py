@@ -107,9 +107,20 @@ def register():
             flash('Invalid registration. Please try again.', 'danger')
 
         # if passwords don't match return flash error
-        if (password != confirm_password):
+        if password != confirm_password:
             success = False
             flash("Passwords Don't match. Please try again.", 'danger')
+        
+        # if info isn't under required length return error
+        if len(username) > 64:
+            success = False
+            flash('Username must be under 64 characters.', 'danger')
+        if len(email) > 64:
+            success = False
+            flash('Email must be under 64 characters.', 'danger')
+        if len(password) > 64:
+            success = False
+            flash('Password must be under 64 characters.', 'danger')
 
         # if type of data isn't string return error
         try:
@@ -122,7 +133,7 @@ def register():
             if not type(password) == str or not type(confirm_password) == str:
                 success = False
                 flash('Invalid password.', 'danger')
-        except ValueError:
+        except:
             success = False
             flash('Invalid registration. Please try again.', 'danger')
 
@@ -147,6 +158,19 @@ def register():
             return redirect(url_for('login'))
 
     return render_template('register.html')
+
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    '''
+    Logout page
+    '''
+    # Remove data from session
+    session.pop("user", None)
+    # Redirect to homepage
+    return redirect(url_for('index'))
+
+
 
 if __name__ == '__main__':
     db.create_all()
