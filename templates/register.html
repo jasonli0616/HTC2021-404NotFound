@@ -6,7 +6,7 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
 
-    <form>
+    <form action="#" method="POST">
         <div class="form-group">
             <label for="exampleInputEmail1">Username</label>
             <input type="text" name="username" id="username" class="form-control" placeholder="Enter your username">
@@ -23,7 +23,7 @@
             <label for="exampleInputPassword1">Confirm password</label>
             <input type="password" name="confirm-password" id="confirm-password" class="form-control" placeholder="Enter your password again">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Sign up</button>
     </form>
 
 {% endblock content %}
