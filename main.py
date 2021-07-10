@@ -14,6 +14,7 @@ from flask import Flask, render_template, url_for, request, redirect, session, f
 from flask_sqlalchemy import SQLAlchemy
 import hashlib
 import os
+import random
 
 
 
@@ -73,26 +74,38 @@ def index():
 
     return render_template('index.html')
 
-@app.route('/tutors')
+@app.route('/tutors', methods=['GET', 'POST'])
 def tutors():
+    
+    tutors = []
+    subject = None 
+    grade = None
 
     if not "user" in session:
         return redirect(url_for('index'))
-
-    tutors = None
 
     if request.method == 'POST':
         subject = request.form["subject"]
         grade = request.form["grade"]
 
-        tutors = Tutor.query.filter_by(subject=subject, grade=grade).order_by(Tutor.average_stars).all()
-        tutors.reverse()
+        success = True
 
-        return render_template('tutors.html', tutors=tutors)
+        if not subject and not grade:
+            success = False
+            flash('Please enter a subject or grade.')
+        elif not subject:
+            tutors = Tutor.query.filter_by(grade=grade).order_by(Tutor.average_stars).all()
+        elif not grade:
+            tutors = Tutor.query.filter_by(subject=subject).order_by(Tutor.average_stars).all()
+        else:
+            tutors = Tutor.query.filter_by(subject=subject, grade=grade).order_by(Tutor.average_stars).all()
+
+        tutors.reverse()
+        return render_template('tutors.html', tutors=tutors, grade=grade, subject=subject)
 
     tutors = Tutor.query.order_by(Tutor.average_stars).all()
     tutors.reverse()
-    return render_template('tutors.html', tutors=tutors)
+    return render_template('tutors.html', tutors=tutors, subject=subject, grade=grade)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -211,5 +224,14 @@ def logout():
 
 if __name__ == '__main__':
     db.create_all()
+
+    for i in range(0, 5):
+        ted = Tutor(name='Ted', email='jim@jim.ca', phone_number='1111111111', pay=25, description=f'Hello my name is Ted.', subject='Physics', grade=random.randint(9, 12), average_stars=random.randint(1, 5), num_stars=20)
+        db.session.add(ted)
+        db.session.commit()
+    for i in range(0, 3):
+        ted = Tutor(name='Ted', email='jim@jim.ca', phone_number='1111111111', pay=25, description=f'Hello my name is Ted.', subject='Math', grade=random.randint(9, 12), average_stars=random.randint(1, 5), num_stars=20)
+        db.session.add(ted)
+        db.session.commit()
 
     app.run(debug=True)
