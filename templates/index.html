@@ -4,7 +4,14 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div data-aos="fade-right" class="text-center">
-<img class="Landing_Page_Image" src="{{ url_for('static', filename='img/landingpage_img.svg') }}" alt="Teacher">
+<div class="text-center"
+    data-aos="fade-right"
+    data-aos-duration="1000"
+>
+<img class="landing-page-image" src="{{ url_for('static', filename='img/landingpage_img.svg') }}" alt="Teacher">
 </div>
 
+
+<h1 class="text-center">Tutor Center</h1>
+
+{% endblock content %}
