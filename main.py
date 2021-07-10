@@ -55,6 +55,18 @@ class User(db.Model):
     email = db.Column(db.String(64))
     password = db.Column(db.String(64))
 
+class Tutor(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    email = db.Column(db.String(64))
+    phone_number = db.Column(db.String(64))
+    pay = db.Column(db.Integer)
+    description = db.Column(db.String(10000))
+    subject = db.Column(db.String(100))
+    grade = db.Column(db.Integer)
+
+
+
 
 @app.route('/index.html')
 @app.route('/')
