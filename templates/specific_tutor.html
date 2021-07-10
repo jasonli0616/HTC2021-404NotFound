@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>{{ tutor.name }}</h2>
+<h4>
+    Teaches: Grade {{ tutor.grade }} {{ tutor.subject }}
+    {% if tutor.subject == 'Math' %}
+        <i class="bi bi-calculator"></i>
+    {% elif tutor.subject == 'English' %}
+        <i class="bi bi-book"></i>
+    {% elif tutor.subject == 'Physics' %}
+        <i class="fas fa-atom"></i>
+    {% elif tutor.subject == 'French' %}
+        <i class="bi bi-translate"></i>
+    {% elif tutor.subject == 'Science' %}
+        <i class="fas fa-flask"></i>
+    {% elif tutor.subject == 'Spanish' %}
+        <i class="bi bi-translate"></i>
+    {% elif tutor.subject == 'Computer Science' %}
+        <i class="bi bi-laptop"></i>
+    {% endif %}
+</h4>
+<!-- stars -->
+{% for i in range(0, tutor.average_stars) %}
+<i class="bi bi-star-fill"></i>
+{% endfor %}
+{% for i in range(0, 5-tutor.average_stars) %}
+<i class="bi bi-star"></i>
+{% endfor %}
+
+<p>
+    {{ tutor.email }}
+    <br>
+    {{ tutor.phone_number[0] }}{{ tutor.phone_number[1] }}{{ tutor.phone_number[2] }}-{{ tutor.phone_number[3] }}{{ tutor.phone_number[4] }}{{ tutor.phone_number[5] }}-{{ tutor.phone_number[6] }}{{ tutor.phone_number[7] }}{{ tutor.phone_number[8] }}{{ tutor.phone_number[9] }}
+    <br>
+    {{ tutor.description }}
+</p>
+
+
+<h5>Reviews:</h5>
+
+{% for review in reviews %}
+    <div>
+        {% for i in range(0, review) %}
+            <i class="bi bi-star-fill"></i>
+        {% endfor %}
+        <h6>{{ review.username }} says: </h6>
+        <h5>{{ review.title }}</h5>
+
+        <div>
+            
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock content %}
