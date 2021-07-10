@@ -1,0 +1,15 @@
+.tutors div {
+    width: 60vw;
+}
+
+.tutor a {
+    text-decoration: none;
+}
+
+.tutor-img {
+    margin-left: 10px;
+    max-width: 15vw;
+    height: auto;
+    margin-top: 20px;
+    border-radius: 25px;
+}
