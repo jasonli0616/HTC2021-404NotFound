@@ -1,0 +1,21 @@
+<!--
+    Login page
+-->
+{% extends 'base.html' %}
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+
+    <form action="#" method="POST">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password">
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+
+{% endblock content %}
