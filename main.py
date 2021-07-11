@@ -26,7 +26,7 @@ App config
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'a' # for testing purposes
-# app.config['SECRET_KEY'] = "string" os.getenv('SECRET_KEY')
+# app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 # Database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
@@ -65,15 +65,33 @@ class Tutor(db.Model):
     subject = db.Column(db.String(100))
     grade = db.Column(db.Integer)
     average_stars = db.Column(db.Integer)
+    image = db.Column(db.String(500))
     num_stars = db.Column(db.Integer)
 
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    tutor_id = db.Column(db.Integer)
     title = db.Column(db.String(250))
     username = db.Column(db.String(64))
     rating = db.Column(db.Integer)
     content = db.Column(db.String(10000))
 
+imageURLs = [
+    'https://images.unsplash.com/photo-1513258496099-48168024aec0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    'https://images.unsplash.com/photo-1596496050755-c923e73e42e1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1336&q=80',
+    'https://images.unsplash.com/photo-1571260899304-425eee4c7efc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    'https://images.unsplash.com/photo-1531482615713-2afd69097998?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    'https://images.unsplash.com/photo-1610008885395-d4b47c2f5c8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    'https://images.pexels.com/photos/4308095/pexels-photo-4308095.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+    'https://images.pexels.com/photos/5538355/pexels-photo-5538355.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+    'https://images.unsplash.com/photo-1513258496099-48168024aec0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1350&q=80',
+    'https://images.unsplash.com/photo-1599687351724-dfa3c4ff81b1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    'https://images.pexels.com/photos/3769981/pexels-photo-3769981.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+    'https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+    'https://images.unsplash.com/flagged/photo-1559475555-b26777ed3ab4?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mjd8fHRlYWNoZXJ8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+    'https://images.unsplash.com/photo-1551862253-ccddd3b67769?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHRlYWNoZXJ8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+    'https://images.unsplash.com/photo-1597570889212-97f48e632dad?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjR8fHRlYWNoZXJ8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'
+]
 subjects = ["All", "Math", "English", "Physics", "French", "Science", "Spanish", "Computer Science"]
 grades = ["All", "5", "6", "7", "8", "9", "10", "11", "12"]
 
@@ -83,28 +101,28 @@ def generateRandomTutor():
     For demonstration purposes
     '''
     with open('tutornames.json') as f:
-        name = json.load(f)[random.randint(0, 21985)]
-    t = Tutor(name=name, email=f"{name.lower()}@fake_email.com", phone_number=random.randint(1000000000, 9999999999), pay=random.randint(10000, 99999), description="Hi! I like to tutor people.", subject=subjects[random.randint(1, len(subjects)-1)], grade=grades[random.randint(1, len(grades)-1)], average_stars=random.randint(0, 5), num_stars=random.randint(0, 100))
-    db.session.add(t)
+        json_file = json.load(f)
+        name = json_file[random.randint(0, 4946)]
+    title = Tutor(name=name, email=f"{name.lower()}@fake_email.com", phone_number=random.randint(1000000000, 9999999999), pay=random.randint(10000, 99999), description="Hi! I like to tutor people.", subject=subjects[random.randint(1, len(subjects)-1)], grade=grades[random.randint(1, len(grades)-1)], average_stars=random.randint(0, 5), image=imageURLs[random.randint(0, 13)], num_stars=2)
+    db.session.add(title)
     db.session.commit()
-
 
 @app.route('/index.html')
 @app.route('/')
 def index():
 
-    return render_template('index.html')
+    return render_template('index.html', session=session)
 
 @app.route('/tutors', methods=['GET', 'POST'])
 def tutors():
+
+    if not "user" in session:
+        return redirect(url_for('index'))
 
     tutors = []
 
     subject, grade = "All", "All"
     tutors = Tutor.query.order_by(Tutor.average_stars).all()
-
-    if not "user" in session:
-        return redirect(url_for('index'))
 
     if request.method == 'POST':
         subject = request.form["subject"]
@@ -120,12 +138,39 @@ def tutors():
             tutors = Tutor.query.filter_by(subject=subject, grade=grade).order_by(Tutor.average_stars).all()
 
     tutors.reverse()
-    return render_template('tutors.html', tutors=tutors, subjects=subjects, grades=grades, grade_selected=grade, subject_selected=subject)
+    return render_template('tutors.html', tutors=tutors, subjects=subjects, grades=grades, grade_selected=grade, subject_selected=subject, session=session)
 
-@app.route('/tutors/<id>')
+@app.route('/tutors/<id>', methods=['GET', 'POST'])
 def tutorName(id):
-    t = Tutor.query.filter_by(id=id).first()
-    return render_template('specific_tutor.html', tutor=t)
+
+    if not "user" in session:
+        return redirect(url_for('index'))
+
+    if request.method == 'POST':
+        title = request.form['title']
+        review = request.form['review']
+        starsSelected = 0
+
+        if title.strip() == '' or review.strip() == '': flash('Please enter a title and description.', 'danger')
+
+        for i in range(1, 7):
+            if f'star-{i}' in request.form: starsSelected = i
+        
+        user = User.query.filter_by(email=session['user']).first()
+        review = Review(tutor_id=id, title=title.strip(), username=user.username, rating=starsSelected, content=review.strip())
+
+        tutor = Tutor.query.filter_by(id=id).first()
+        tutor.average_stars = round((tutor.num_stars * tutor.average_stars + starsSelected) / (tutor.num_stars + 1))
+        tutor.num_stars += 1
+
+        db.session.add(review)
+        db.session.commit()
+    
+
+    tutor = Tutor.query.filter_by(id=id).first()
+    reviews = Review.query.filter_by(tutor_id=id).all()
+    salaryRounded = round(tutor.pay / 12 / 30)
+    return render_template('specific_tutor.html', tutor=tutor, reviews=reviews, salaryRounded=salaryRounded, session=session)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -147,7 +192,7 @@ def login():
             flash('Incorrect email or password', 'danger')
             return redirect(url_for('login'))
     
-    return render_template('login.html')
+    return render_template('login.html', session=session)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -223,7 +268,7 @@ def register():
             flash('Your account has been created.', 'success')
             return redirect(url_for('login'))
 
-    return render_template('register.html')
+    return render_template('register.html', session=session)
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -245,7 +290,7 @@ def logout():
 if __name__ == '__main__':
     db.create_all()
 
-    for i in range(0, 100):
-        generateRandomTutor()
+    # for i in range(0, 100):
+    #     generateRandomTutor()
 
     app.run(debug=True, host='0.0.0.0')

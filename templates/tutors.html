@@ -22,7 +22,7 @@
                 <option value="{{ grade }}" selected>{{ grade }}</option>
             {% else %}
                 <option value="{{ grade }}">{{ grade }}</option>
-            {% endif %}<
+            {% endif %}
         {% endfor %}
     </select>
     <button type="submit" class="btn btn-primary">Find</button>
@@ -31,47 +31,55 @@
 <div class="tutor-wrapper">
     {% if tutors %}
         {% for tutor in tutors %}
-        <div class="tutor"
+        <div class="tutor-animation"
             data-aos="fade-up"
             data-aos-duration="1000"
         >
-            <a href="/tutors/{{ tutor.id }}">
-            <div class="alert alert-dark" role="alert">
-                <h4 class="alert-heading">{{ tutor.name }}</h4>
+            <div class="tutor my-5">
+                <a href="/tutors/{{ tutor.id }}">
+                <div class="alert alert-dark p-5" role="alert">
+                    <h4 class="alert-heading">{{ tutor.name }}</h4>
 
-                <!-- stars -->
-                {% for i in range(0, tutor.average_stars) %}
-                    <i class="bi bi-star-fill"></i>
-                {% endfor %}
-                {% for i in range(0, 5-tutor.average_stars) %}
-                    <i class="bi bi-star"></i>
-                {% endfor %}
+                    <!-- stars -->
+                    {% for i in range(0, tutor.average_stars) %}
+                        <i class="bi bi-star-fill"></i>
+                    {% endfor %}
+                    {% for i in range(0, 5-tutor.average_stars) %}
+                        <i class="bi bi-star"></i>
+                    {% endfor %}
 
-                <p>
-                    <strong>Subject:</strong> Grade {{ tutor.grade }} {{ tutor.subject }}
-                    {% if tutor.subject == 'Math' %}
-                        <i class="bi bi-calculator"></i>
-                    {% elif tutor.subject == 'English' %}
-                        <i class="bi bi-book"></i>
-                    {% elif tutor.subject == 'Physics' %}
-                        <i class="fas fa-atom"></i>
-                    {% elif tutor.subject == 'French' %}
-                        <i class="bi bi-translate"></i>
-                    {% elif tutor.subject == 'Science' %}
-                        <i class="fas fa-flask"></i>
-                    {% elif tutor.subject == 'Spanish' %}
-                        <i class="bi bi-translate"></i>
-                    {% elif tutor.subject == 'Computer Science' %}
-                        <i class="bi bi-laptop"></i>
+                    <p>
+                        <strong>Subject:</strong> Grade {{ tutor.grade }} {{ tutor.subject }}
+                        {% if tutor.subject == 'Math' %}
+                            <i class="bi bi-calculator"></i>
+                        {% elif tutor.subject == 'English' %}
+                            <i class="bi bi-book"></i>
+                        {% elif tutor.subject == 'Physics' %}
+                            <i class="fas fa-atom"></i>
+                        {% elif tutor.subject == 'French' %}
+                            <i class="bi bi-translate"></i>
+                        {% elif tutor.subject == 'Science' %}
+                            <i class="fas fa-flask"></i>
+                        {% elif tutor.subject == 'Spanish' %}
+                            <i class="bi bi-translate"></i>
+                        {% elif tutor.subject == 'Computer Science' %}
+                            <i class="bi bi-laptop"></i>
+                        {% endif %}
+                    </p>
+
+                    <hr>
+                    <p class="mb-0">{{ tutor.description }}</p>
+
+                    {% if tutor.image %}
+                        <div class="tutors-img-wrapper">
+                            <img src="{{ tutor.image }}" alt="" class="tutor-img">
+                            <!-- Frontend JS inserts image here -->
+                        </div>
                     {% endif %}
-                </p>
+                </div>
+                </a>
 
-                <hr>
-                <p class="mb-0">{{ tutor.description }}</p>
-                <img class="tutor-img" src="https://images.unsplash.com/photo-1513258496099-48168024aec0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="">
             </div>
-            </a>
-
         </div>
         {% endfor %}
     {% endif %}

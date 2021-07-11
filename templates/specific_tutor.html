@@ -1,55 +1,107 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>{{ tutor.name }}</h2>
-<h4>
-    Teaches: Grade {{ tutor.grade }} {{ tutor.subject }}
-    {% if tutor.subject == 'Math' %}
-        <i class="bi bi-calculator"></i>
-    {% elif tutor.subject == 'English' %}
-        <i class="bi bi-book"></i>
-    {% elif tutor.subject == 'Physics' %}
-        <i class="fas fa-atom"></i>
-    {% elif tutor.subject == 'French' %}
-        <i class="bi bi-translate"></i>
-    {% elif tutor.subject == 'Science' %}
-        <i class="fas fa-flask"></i>
-    {% elif tutor.subject == 'Spanish' %}
-        <i class="bi bi-translate"></i>
-    {% elif tutor.subject == 'Computer Science' %}
-        <i class="bi bi-laptop"></i>
-    {% endif %}
-</h4>
-<!-- stars -->
-{% for i in range(0, tutor.average_stars) %}
-<i class="bi bi-star-fill"></i>
-{% endfor %}
-{% for i in range(0, 5-tutor.average_stars) %}
-<i class="bi bi-star"></i>
-{% endfor %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/specific_tutor.css') }}">
 
-<p>
+<div class="intro-wrapper">
+
+    <img class="img-fluid tutor-img" src="{{ tutor.image }}" alt="Pencils">
+
+    <div style="width: 50%;">
+        <h1>{{ tutor.name }}</h1>
+        <h3>
+            Grade {{ tutor.grade }} {{ tutor.subject }}
+            {% if tutor.subject == 'Math' %}
+                <i class="bi bi-calculator"></i>
+            {% elif tutor.subject == 'English' %}
+                <i class="bi bi-book"></i>
+            {% elif tutor.subject == 'Physics' %}
+                <i class="fas fa-atom"></i>
+            {% elif tutor.subject == 'French' %}
+                <i class="bi bi-translate"></i>
+            {% elif tutor.subject == 'Science' %}
+                <i class="fas fa-flask"></i>
+            {% elif tutor.subject == 'Spanish' %}
+                <i class="bi bi-translate"></i>
+            {% elif tutor.subject == 'Computer Science' %}
+                <i class="bi bi-laptop"></i>
+            {% endif %}
+        </h3>
+    </div>
+</div>
+
+<h3 class="biography-header">Biography:</h3>
+        <p class="biography-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+            Vivamus id tincidunt nisl, vel auctor elit. 
+            Praesent imperdiet faucibus posuere. 
+            Integer eget lorem pharetra, sodales ex et, molestie ex. 
+            Nullam ac erat sed ante mollis congue ornare a leo. 
+            Fusce non ultrices erat. In aliquet mi ut libero eleifend faucibus. 
+            Aliquam venenatis tellus nisi, non ultricies diam tristique quis. 
+            Vivamus elementum neque sed sem gravida, at dapibus lectus faucibus. 
+            Fusce vehicula est vel lacus suscipit, in luctus justo semper.
+        </p>
+
+
+<h3>Pay/Hour: ${{ salaryRounded }}</h3>
+
+<h2>Contact Information:</h2>
+<p class="boxed">
     {{ tutor.email }}
     <br>
     {{ tutor.phone_number[0] }}{{ tutor.phone_number[1] }}{{ tutor.phone_number[2] }}-{{ tutor.phone_number[3] }}{{ tutor.phone_number[4] }}{{ tutor.phone_number[5] }}-{{ tutor.phone_number[6] }}{{ tutor.phone_number[7] }}{{ tutor.phone_number[8] }}{{ tutor.phone_number[9] }}
     <br>
-    {{ tutor.description }}
 </p>
 
+<h3>Write a Review:</h3>
+<div class="container">
+    <form id="reviewForm" action="#" method="POST">
+        <div class="form-group">
+            <label>Title</label>
+            <input type="text" name="title" id="title" class="form-control" placeholder="Title">
+        </div>
+        <div class="stars">
+            <input class="star" onclick="fill_stars(1)" id="star-1" name="star-1" type="checkbox">
+            <input class="star" onclick="fill_stars(2)" id="star-2" name="star-2" type="checkbox">
+            <input class="star" onclick="fill_stars(3)" id="star-3" name="star-3" type="checkbox">
+            <input class="star" onclick="fill_stars(4)" id="star-4" name="star-4" type="checkbox">
+            <input class="star" onclick="fill_stars(5)" id="star-5" name="star-5" type="checkbox">
+        </div>
+        <div class="form-group">
+            <label>Review</label>
+            <input type="text" name="review" id="review" class="form-control" placeholder="Review">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<script src="{{ url_for('static', filename='js/specific_tutor.js') }}"></script>
 
-<h5>Reviews:</h5>
+<br>
+
+<h4>Reviews:</h4>
+
+{% if not reviews %}
+    <div class="alert alert-secondary" role="alert">
+        There are no reviews yet, be the first to write one!
+    </div>
+
+{% endif %}
 
 {% for review in reviews %}
     <div>
-        {% for i in range(0, review) %}
+
+        <h6>{{ review.username }} says: </h6>
+
+        {% for i in range(0, review.rating) %}
             <i class="bi bi-star-fill"></i>
         {% endfor %}
-        <h6>{{ review.username }} says: </h6>
+        {% for i in range(0, 5-review.rating) %}
+            <i class="bi bi-star"></i>
+        {% endfor %}
+        
         <h5>{{ review.title }}</h5>
-
-        <div>
-            
-        </div>
+        <p>{{ review.content }}</p>
     </div>
 {% endfor %}
 
