@@ -1,3 +1,14 @@
+#getTutorForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.cat-drop {
+    cursor: pointer;
+}
+
 .tutor-animation {
     object-fit: contain;
 }

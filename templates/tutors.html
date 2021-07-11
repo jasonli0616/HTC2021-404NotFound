@@ -6,8 +6,8 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/tutors.css') }}">
 
-<form action="#" method="POST">
-    <select name="subject">
+<form id="getTutorForm" action="#" method="POST">
+    <select class="mr-2 p-1 cat-drop" name="subject">
         {% for subject in subjects %}
             {% if subject == subject_selected %}
                 <option value="{{ subject }}" selected>{{ subject }}</option>
@@ -16,7 +16,7 @@
             {% endif %}
         {% endfor %}
     </select>
-    <select name="grade">
+    <select class="mr-2 p-1 cat-drop" name="grade">
         {% for grade in grades %}
             {% if grade == grade_selected %}
                 <option value="{{ grade }}" selected>{{ grade }}</option>
@@ -82,6 +82,10 @@
             </div>
         </div>
         {% endfor %}
+    {% else %}
+        <div class="alert alert-dark p-2 my-3" role="alert">
+            There are currently no tutors in this category.
+        </div>
     {% endif %}
 </div>
 

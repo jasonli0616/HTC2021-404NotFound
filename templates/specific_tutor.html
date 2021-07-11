@@ -5,7 +5,7 @@
 
 <div class="intro-wrapper">
 
-    <img class="img-fluid tutor-img" src="{{ tutor.image }}" alt="Pencils">
+    <img class="img-fluid tutor-img" src="{{ tutor.image }}" alt="">
 
     <div style="width: 50%;">
         <h1>{{ tutor.name }}</h1>
@@ -27,26 +27,23 @@
                 <i class="bi bi-laptop"></i>
             {% endif %}
         </h3>
+
+        <h4>
+            {% for i in range(0, tutor.average_stars) %}
+                <i class="bi bi-star-fill"></i>
+            {% endfor %}
+            {% for i in range(0, 5-tutor.average_stars) %}
+                <i class="bi bi-star"></i>
+            {% endfor %}
+        </h4>
+        <h4>Rate: <br> ${{ tutor.pay }}/hr</h4>
+
     </div>
 </div>
 
-<h3 class="biography-header">Biography:</h3>
-        <p class="biography-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-            Vivamus id tincidunt nisl, vel auctor elit. 
-            Praesent imperdiet faucibus posuere. 
-            Integer eget lorem pharetra, sodales ex et, molestie ex. 
-            Nullam ac erat sed ante mollis congue ornare a leo. 
-            Fusce non ultrices erat. In aliquet mi ut libero eleifend faucibus. 
-            Aliquam venenatis tellus nisi, non ultricies diam tristique quis. 
-            Vivamus elementum neque sed sem gravida, at dapibus lectus faucibus. 
-            Fusce vehicula est vel lacus suscipit, in luctus justo semper.
-        </p>
+<br>
 
-
-<h3>Pay/Hour: ${{ salaryRounded }}</h3>
-
-<h2>Contact Information:</h2>
+<h3>Contact Information:</h3>
 <p class="boxed">
     {{ tutor.email }}
     <br>
@@ -54,12 +51,22 @@
     <br>
 </p>
 
+<br>
+
+<h3 class="biography-header">Biography:</h3>
+<p class="biography-text">
+    {{ tutor.description }}
+</p>
+
+
+<br>
+
 <h3>Write a Review:</h3>
-<div class="container">
-    <form id="reviewForm" action="#" method="POST">
+<div class="container mb-4">
+    <form action="#" method="POST">
         <div class="form-group">
             <label>Title</label>
-            <input type="text" name="title" id="title" class="form-control" placeholder="Title">
+            <input type="text" name="title" id="title" class="form-control" placeholder="Title" maxlength="250" required>
         </div>
         <div class="stars">
             <input class="star" onclick="fill_stars(1)" id="star-1" name="star-1" type="checkbox">
@@ -70,39 +77,53 @@
         </div>
         <div class="form-group">
             <label>Review</label>
-            <input type="text" name="review" id="review" class="form-control" placeholder="Review">
+            <input type="text" name="review" id="review" class="form-control" placeholder="Review" maxlength="10000" required>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
-<script src="{{ url_for('static', filename='js/specific_tutor.js') }}"></script>
 
 <br>
 
-<h4>Reviews:</h4>
+<h3>Reviews:</h3>
 
 {% if not reviews %}
-    <div class="alert alert-secondary" role="alert">
-        There are no reviews yet, be the first to write one!
+    <div class="alert alert-secondary mb-5"
+        data-aos="fade-down"
+        data-aos-duration="800"
+    >
+    There are no reviews yet, be the first to write one!
     </div>
 
 {% endif %}
 
-{% for review in reviews %}
-    <div>
+<div>
+    {% for review in reviews %}
+        <div class="alert alert-secondary mb-5"
+            data-aos="fade-down"
+            data-aos-duration="800"
+        >
 
-        <h6>{{ review.username }} says: </h6>
+            <h6>{{ review.username }} says:</h6>
 
-        {% for i in range(0, review.rating) %}
-            <i class="bi bi-star-fill"></i>
-        {% endfor %}
-        {% for i in range(0, 5-review.rating) %}
-            <i class="bi bi-star"></i>
-        {% endfor %}
-        
-        <h5>{{ review.title }}</h5>
-        <p>{{ review.content }}</p>
-    </div>
-{% endfor %}
+            <hr class="my-3">
+
+            <h5 class="mb-0">{{ review.title }}</h5>
+
+            {% for i in range(0, review.rating) %}
+                <i class="bi bi-star-fill"></i>
+            {% endfor %}
+            {% for i in range(0, 5-review.rating) %}
+                <i class="bi bi-star"></i>
+            {% endfor %}
+            
+            <p>{{ review.content }}</p>
+        </div>
+    {% endfor %}
+</div>
+<br>
+<br>
+
+<script src="{{ url_for('static', filename='js/specific_tutor.js') }}"></script>
 
 {% endblock content %}

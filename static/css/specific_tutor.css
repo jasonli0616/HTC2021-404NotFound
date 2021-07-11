@@ -42,17 +42,6 @@
    color: gold;
 }
 
-
 .biography-text{
     align-content: left;
-
 }
-
-/* @media screen and (max-width: 800px) {
-    .intro-wrapper {
-        display: flex;
-        flex-direction: row;
-        justify-content: left;
-        align-items: center;
-    }
-} */
