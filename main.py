@@ -350,7 +350,7 @@ def logout():
 
     # Remove data from session
     session.pop("user", None)
-    # Redirect to homepag
+    # Redirect to homepage
     return redirect(url_for('index'))
 
 
